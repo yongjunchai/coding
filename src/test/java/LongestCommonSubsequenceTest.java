@@ -4,7 +4,7 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LongestCommonSubstringTest {
+public class LongestCommonSubsequenceTest {
 
     private static class Entry {
         public String str1;
@@ -23,14 +23,13 @@ public class LongestCommonSubstringTest {
     @Test
     public void testLcs() {
         List<Entry> entries = new ArrayList<>();
-        entries.add(Entry.create("helloabc", "chhhelloadef", "helloa"));
-        entries.add(Entry.create("", "chhhelloadef", ""));
+        entries.add(Entry.create("abababababddd", "aaaaaaa", "aaaaa"));
+        entries.add(Entry.create("abchihowareyoudef", "kkk abc are you def good", "abcareyoudef"));
+        entries.add(Entry.create("abchihowareyoudef", "", ""));
         entries.add(Entry.create("abc", "def", ""));
-        entries.add(Entry.create("hi how are you.", "i am fine, and you.", " you."));
-        entries.add(Entry.create("hi how are you. good", "i am fine, and you. see you. bye.", "e you. "));
-        LongestCommonSubstring longestCommonSubstring = new LongestCommonSubstring();
-        for (Entry entry: entries) {
-            final String lcs = longestCommonSubstring.longestCommonSubstring(entry.str1.toCharArray(), entry.str2.toCharArray());
+        LongestCommonSubsequence longestCommonSubsequence = new LongestCommonSubsequence();
+        for (Entry entry : entries) {
+            String lcs = longestCommonSubsequence.findLongestCommonSubsequence(entry.str1.toCharArray(), entry.str2.toCharArray());
             Assert.assertTrue(entry.lcs.equals(lcs));
         }
     }
