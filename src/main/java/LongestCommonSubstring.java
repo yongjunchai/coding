@@ -66,7 +66,8 @@ public class LongestCommonSubstring {
             j -= 1;
         }
         if (index != -1) {
-            System.out.println("error detected. failed to fetch lcs");
+            System.out.println("error detected. failed to fetch lcs, index is not -1");
+            throw new IllegalStateException("error detected. failed to fetch lcs, index is not -1");
         }
         return new String(lcs);
     }
