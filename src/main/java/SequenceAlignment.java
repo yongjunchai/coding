@@ -4,9 +4,10 @@ public class SequenceAlignment {
         public char[] leftAligned;
         public char[] rightAligned;
         public int totalPenality;
+        public Note[][] notes;
     }
 
-    static class Note
+    static public class Note
     {
         public int penality = 0;
         public int leftGapAdded = 0;
@@ -107,6 +108,7 @@ public class SequenceAlignment {
         result.leftAligned = leftAligned;
         result.rightAligned = rightAligned;
         result.totalPenality = problem[left.length][right.length].penality;
+        result.notes = problem;
         return result;
     }
 }
