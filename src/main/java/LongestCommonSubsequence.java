@@ -4,7 +4,7 @@ public class LongestCommonSubsequence {
         return null == str || str.length == 0;
     }
 
-    private static class Note {
+    public static class Note {
         public boolean equal;
         public int subsequenceLen;
         static Note create() {
@@ -15,9 +15,21 @@ public class LongestCommonSubsequence {
         }
     }
 
-    public String findLongestCommonSubsequence(final char[] left, final char[] right) {
+    public static class Result {
+        public String commonSubsequence;
+        public Note[][] notes;
+
+        static public Result create() {
+            Result result = new Result();
+            result.commonSubsequence = "";
+            result.notes = null;
+            return result;
+        }
+    }
+
+    public Result findLongestCommonSubsequence(final char[] left, final char[] right) {
         if (isEmpty(left) || isEmpty(right)) {
-            return "";
+            return Result.create();
         }
         int leftLen = left.length;
         int rightLen = right.length;
@@ -48,7 +60,10 @@ public class LongestCommonSubsequence {
         }
         int lcsLen = notes[leftLen][rightLen].subsequenceLen;
         if (lcsLen == 0) {
-            return "";
+            Result result = Result.create();
+            result.commonSubsequence = "";
+            result.notes = notes;
+            return result;
         }
         //reconstruct longest common subsequence
         char[] lcs = new char[lcsLen];
@@ -72,6 +87,9 @@ public class LongestCommonSubsequence {
                 }
             }
         }
-        return new String(lcs);
+        Result result = Result.create();
+        result.commonSubsequence = new String(lcs);
+        result.notes = notes;
+        return result;
     }
 }

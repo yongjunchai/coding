@@ -29,8 +29,13 @@ public class LongestCommonSubsequenceTest {
         entries.add(Entry.create("abc", "def", ""));
         LongestCommonSubsequence longestCommonSubsequence = new LongestCommonSubsequence();
         for (Entry entry : entries) {
-            String lcs = longestCommonSubsequence.findLongestCommonSubsequence(entry.str1.toCharArray(), entry.str2.toCharArray());
-            Assert.assertTrue(entry.lcs.equals(lcs));
+             LongestCommonSubsequence.Result result = longestCommonSubsequence.findLongestCommonSubsequence(entry.str1.toCharArray(), entry.str2.toCharArray());
+            Assert.assertTrue(entry.lcs.equals(result.commonSubsequence));
+            Utility.FetchValue<LongestCommonSubsequence.Note> fetchValue = (LongestCommonSubsequence.Note a) -> {return Integer.toString(a.subsequenceLen);} ;
+            System.out.println(entry.str1);
+            System.out.println(entry.str2);
+            System.out.println(result.commonSubsequence);
+            Utility.dump(result.notes, fetchValue);
         }
     }
 }

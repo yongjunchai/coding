@@ -4,7 +4,7 @@ public class LongestCommonSubstring {
     private boolean isEmpty(final char[] str) {
         return null == str || str.length == 0;
     }
-    private static class Note {
+    public static class Note {
         public boolean equal;
         public int substringLen;
         static Note create() {
@@ -15,9 +15,21 @@ public class LongestCommonSubstring {
         }
     }
 
-    String longestCommonSubstring(final char[] left, final char[] right) {
+    public static class Result {
+        public Note[][] notes;
+        public String commonSubstring;
+
+        public static Result create() {
+            Result result = new Result();
+            result.notes = null;
+            result.commonSubstring = "";
+            return result;
+        }
+    }
+
+    public Result longestCommonSubstring(final char[] left, final char[] right) {
         if (isEmpty(left) || isEmpty(right)) {
-            return "";
+            return Result.create();
         }
         int leftLen = left.length;
         int rightLen = right.length;
@@ -49,7 +61,10 @@ public class LongestCommonSubstring {
             }
         }
         if (lcsLen == 0) {
-            return "";
+            Result result =  Result.create();
+            result.commonSubstring = "";
+            result.notes = notes;
+            return result;
         }
         //reconstruct the longest substring
         char[] lcs  = new char[lcsLen];
@@ -65,6 +80,9 @@ public class LongestCommonSubstring {
             i -= 1;
             j -= 1;
         }
-        return new String(lcs);
+        Result result = Result.create();
+        result.notes = notes;
+        result.commonSubstring = new String(lcs);
+        return result;
     }
 }
