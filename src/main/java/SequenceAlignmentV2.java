@@ -71,24 +71,13 @@ public class SequenceAlignmentV2 {
         }
         while (i > 0) {
             leftAlignmentBuilder.append(left[i - 1]);
+            rightAlignmentBuilder.append("-");
             i -= 1;
         }
         while (j > 0) {
             rightAlignmentBuilder.append(right[j - 1]);
+            leftAlignmentBuilder.append("-");
             j -= 1;
-        }
-        int alignedLen = Math.max(leftAlignmentBuilder.length(), rightAlignmentBuilder.length());
-        if (leftAlignmentBuilder.length() < alignedLen) {
-            int gaps = alignedLen - leftAlignmentBuilder.length();
-            for (int index = 0; index < gaps; ++ index) {
-                leftAlignmentBuilder.append("-");
-            }
-        }
-        if (rightAlignmentBuilder.length() < alignedLen) {
-            int gaps = alignedLen - rightAlignmentBuilder.length();
-            for (int index = 0; index < gaps; ++ index) {
-                rightAlignmentBuilder.append("-");
-            }
         }
         char[] reversedLeftAlignment = leftAlignmentBuilder.toString().toCharArray();
         char[] reversedRightAlignment = rightAlignmentBuilder.toString().toCharArray();
