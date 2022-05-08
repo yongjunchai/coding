@@ -29,12 +29,12 @@ public class LongestCommonSubstringTest {
         entries.add(Entry.create("hi how are you.", "i am fine, and you.", " you."));
         entries.add(Entry.create("hi how are you. good", "i am fine, and you. see you. bye.", "e you. "));
         LongestCommonSubstring longestCommonSubstring = new LongestCommonSubstring();
+        Utility.FetchValue<LongestCommonSubstring.Note> fetchValue = (LongestCommonSubstring.Note a) -> {return Integer.toString(a.substringLen);} ;
         for (Entry entry: entries) {
             LongestCommonSubstring.Result result = longestCommonSubstring.longestCommonSubstring(entry.str1.toCharArray(), entry.str2.toCharArray());
             System.out.println(entry.str1);
             System.out.println(entry.str2);
             System.out.println(result.commonSubstring);
-            Utility.FetchValue<LongestCommonSubstring.Note> fetchValue = (LongestCommonSubstring.Note a) -> {return Integer.toString(a.substringLen);} ;
             Utility.dump(result.notes, fetchValue);
             Assert.assertTrue(entry.lcs.equals(result.commonSubstring));
         }

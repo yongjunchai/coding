@@ -4,7 +4,7 @@ public class SequenceAlignment {
         public char[] leftAligned;
         public char[] rightAligned;
         public int totalPenality;
-        public Note[][] notes;
+        public Note[][] subProblems;
     }
 
     static public class Note
@@ -70,45 +70,47 @@ public class SequenceAlignment {
         char[] rightAligned = new char[left.length + problem[left.length][right.length].leftGapAdded];
         int i = left.length;
         int j = right.length;
-        int curIndex = leftAligned.length - 1;
+        int curtIndex = leftAligned.length - 1;
         while (i > 0 && j > 0) {
             int case1Penality =  problem[i - 1][j -1].penality + (left[i - 1] == right[j - 1] ? 0 : mismatchPenality);
             int case2Penality = problem[i - 1][j].penality + gapPenality;
             if (case1Penality == problem[i][j].penality) {
-                leftAligned[curIndex] = left[i - 1];
-                rightAligned[curIndex] = right[j - 1];
+                leftAligned[curtIndex] = left[i - 1];
+                rightAligned[curtIndex] = right[j - 1];
                 i -= 1;
                 j -= 1;
             }
             else if (case2Penality == problem[i][j].penality) {
-                leftAligned[curIndex] = left[i - 1];
-                rightAligned[curIndex] = '-';
+                leftAligned[curtIndex] = left[i - 1];
+                rightAligned[curtIndex] = '-';
                 i -= 1;
             }
             else {
-                leftAligned[curIndex] = '-';
-                rightAligned[curIndex] = right[j - 1];
+                leftAligned[curtIndex] = '-';
+                rightAligned[curtIndex] = right[j - 1];
                 j -= 1;
             }
-            curIndex -= 1;
+            curtIndex -= 1;
         }
+        int iIndex = curtIndex;
+        int jIndex = curtIndex;
         while (i > 0) {
-            leftAligned[curIndex] = left[i - 1];
-            rightAligned[curIndex] = '-';
+            leftAligned[iIndex] = left[i - 1];
+            rightAligned[iIndex] = '-';
             i -= 1;
-            curIndex -= 1;
+            iIndex -= 1;
         }
         while (j > 0) {
-            leftAligned[curIndex] = '-';
-            rightAligned[curIndex] = right[j - 1];
-            curIndex -= 1;
+            leftAligned[jIndex] = '-';
+            rightAligned[jIndex] = right[j - 1];
+            jIndex -= 1;
             j -= 1;
         }
         Result result = new Result();
         result.leftAligned = leftAligned;
         result.rightAligned = rightAligned;
         result.totalPenality = problem[left.length][right.length].penality;
-        result.notes = problem;
+        result.subProblems = problem;
         return result;
     }
 }
