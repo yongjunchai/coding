@@ -26,6 +26,8 @@ public class SequenceAlignmentTest {
 
     private List<Entry> getTestData() {
         List<Entry> entries = new ArrayList<>();
+        entries.add(Entry.create("d", "bcd", 1, 2, 2));
+        entries.add(Entry.create("abc", "bcd", 1, 2, 2));
         entries.add(Entry.create("how you", "hi how are you", 1, 2, 7));
         entries.add(Entry.create("hi how are you", "how you", 1, 2, 7));
         entries.add(Entry.create("def", "e", 1, 2, 2));

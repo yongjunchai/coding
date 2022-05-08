@@ -11,7 +11,6 @@ public class SequenceAlignment {
     {
         public int penality = 0;
         public int leftGapAdded = 0;
-        public int rightGapAdded = 0;
     }
     /**
      * Problem:
@@ -43,6 +42,7 @@ public class SequenceAlignment {
         }
         for (int j = 0; j <= right.length; ++ j) {
             subProblem[0][j].penality = j * gapPenality;
+            subProblem[0][j].leftGapAdded = j;
         }
         for (int i = 1; i <= left.length; ++ i) {
             for (int j = 1; j <= right.length; ++ j) {
@@ -55,7 +55,6 @@ public class SequenceAlignment {
                 }
                 else if (minPenality == case2Penality) {
                     subProblem[i][j].leftGapAdded = subProblem[i - 1][j].leftGapAdded;
-                    subProblem[i][j].rightGapAdded = subProblem[i - 1][j].rightGapAdded + 1;
                 }
                 else {
                     subProblem[i][j].leftGapAdded = subProblem[i][j -1].leftGapAdded + 1;
@@ -68,7 +67,7 @@ public class SequenceAlignment {
 
     private Result reconstruct(final char[] left, final char[] right, final int gapPenality, final int mismatchPenality, final Note[][] suProblems) {
         //reconstruct sequence alignment
-        int alignedLength = Math.max(left.length + suProblems[left.length][right.length].leftGapAdded, right.length + suProblems[left.length][right.length].rightGapAdded);
+        int alignedLength = left.length + suProblems[left.length][right.length].leftGapAdded;
         char[] leftAligned = new char[alignedLength];
         char[] rightAligned = new char[alignedLength];
         int i = left.length;
