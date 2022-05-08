@@ -14,21 +14,7 @@ public class SequenceAlignmentV2 {
 
     public Result sequenceAlign(final char[] left, final char[] right, final int gapPenality, final int mismatchPenality){
         if (left == null || left.length == 0 || right == null || right.length == 0) {
-            Result result = new Result();
-            int leftLen = null == left ? 0 : left.length;
-            int rightLen = null == right ? 0 : right.length;
-            if (leftLen == 0 && rightLen == 0) {
-                return result;
-            }
-            if (leftLen != 0) {
-                result.leftAligned = left;
-                result.totalPenality = leftLen * gapPenality;
-            }
-            if (rightLen != 0) {
-                result.rightAligned = right;
-                result.totalPenality = rightLen * gapPenality;
-            }
-            return result;
+            return null;
         }
         /**
          * probelm[i][j] = min

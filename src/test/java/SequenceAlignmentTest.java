@@ -26,6 +26,7 @@ public class SequenceAlignmentTest {
 
     private List<Entry> getTestData() {
         List<Entry> entries = new ArrayList<>();
+        entries.add(Entry.create("", "bcd", 1, 2, -1));
         entries.add(Entry.create("d", "bcd", 1, 2, 2));
         entries.add(Entry.create("abc", "bcd", 1, 2, 2));
         entries.add(Entry.create("how you", "hi how are you", 1, 2, 7));
@@ -45,6 +46,10 @@ public class SequenceAlignmentTest {
         Utility.FetchValue<SequenceAlignment.Note> fetchValue = (a) -> {return Integer.toString(a.penality);} ;
         for (Entry entry : entries) {
             SequenceAlignment.Result result = sequenceAlignment.sequenceAlign(entry.left.toCharArray(), entry.right.toCharArray(), entry.gapPenality, entry.mismatchPenality);
+            if (entry.left.length() == 0 || entry.right.length() == 0) {
+                Assert.assertTrue(null == result);
+                continue;
+            }
             System.out.println(result.leftAligned);
             System.out.println(result.rightAligned);
             Utility.dump(result.subProblems, fetchValue);
@@ -60,11 +65,14 @@ public class SequenceAlignmentTest {
         Utility.FetchValue<Integer> fetchValue = (a) -> {return Integer.toString(a);} ;
         for (Entry entry : entries) {
             SequenceAlignmentV2.Result result = sequenceAlignmentV2.sequenceAlign(entry.left.toCharArray(), entry.right.toCharArray(), entry.gapPenality, entry.mismatchPenality);
+            if (entry.left.length() == 0 || entry.right.length() == 0) {
+                Assert.assertTrue(null == result);
+                continue;
+            }
             System.out.println(result.leftAligned);
             System.out.println(result.rightAligned);
             Utility.dump(result.subProblems, fetchValue);
             Assert.assertTrue(result.totalPenality == entry.minPenality);
         }
     }
-
 }

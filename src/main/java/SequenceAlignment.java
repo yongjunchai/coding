@@ -27,7 +27,7 @@ public class SequenceAlignment {
      *  }
      * */
     public Result sequenceAlign(final char[] left, final char[] right, final int gapPenality, final int mismatchPenality) {
-        if (null == left || null == right) {
+        if (null == left || null == right || left.length == 0 || right.length == 0) {
             return null;
         }
         Note[][] subProblem = new Note[left.length + 1][right.length + 1];
