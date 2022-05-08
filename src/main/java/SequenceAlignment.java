@@ -11,6 +11,7 @@ public class SequenceAlignment {
     {
         public int penality = 0;
         public int leftGapAdded = 0;
+        public int rightGapAdded = 0;
     }
     /**
      * Problem:
@@ -30,57 +31,59 @@ public class SequenceAlignment {
         if (null == left || null == right) {
             return null;
         }
-        Note[][] problem = new Note[left.length + 1][right.length + 1];
+        Note[][] subProblem = new Note[left.length + 1][right.length + 1];
         for (int i = 0; i <= left.length; ++ i) {
             for (int j = 0; j <= right.length; ++j) {
-                problem[i][j] = new Note();
+                subProblem[i][j] = new Note();
             }
         }
         //base case. sequence is empty
         for (int i = 0; i <= left.length; ++ i) {
-            problem[i][0].penality = i * gapPenality;
+            subProblem[i][0].penality = i * gapPenality;
         }
         for (int j = 0; j <= right.length; ++ j) {
-            problem[0][j].penality = j * gapPenality;
+            subProblem[0][j].penality = j * gapPenality;
         }
         for (int i = 1; i <= left.length; ++ i) {
             for (int j = 1; j <= right.length; ++ j) {
-                int case1Penality =  problem[i - 1][j -1].penality + (left[i - 1] == right[j - 1] ? 0 : mismatchPenality);
-                int case2Penality = problem[i - 1][j].penality + gapPenality;
-                int case3Penality = problem[i][j - 1].penality + gapPenality;
+                int case1Penality =  subProblem[i - 1][j -1].penality + (left[i - 1] == right[j - 1] ? 0 : mismatchPenality);
+                int case2Penality = subProblem[i - 1][j].penality + gapPenality;
+                int case3Penality = subProblem[i][j - 1].penality + gapPenality;
                 int minPenality = Math.min(Math.min(case1Penality, case2Penality), case3Penality);
                 if (minPenality == case1Penality) {
-                    problem[i][j].leftGapAdded = problem[i - 1][j -1].leftGapAdded;
+                    subProblem[i][j].leftGapAdded = subProblem[i - 1][j -1].leftGapAdded;
                 }
                 else if (minPenality == case2Penality) {
-                    problem[i][j].leftGapAdded = problem[i - 1][j].leftGapAdded;
+                    subProblem[i][j].leftGapAdded = subProblem[i - 1][j].leftGapAdded;
+                    subProblem[i][j].rightGapAdded = subProblem[i - 1][j].rightGapAdded + 1;
                 }
                 else {
-                    problem[i][j].leftGapAdded = problem[i][j -1].leftGapAdded + 1;
+                    subProblem[i][j].leftGapAdded = subProblem[i][j -1].leftGapAdded + 1;
                 }
-                problem[i][j].penality = minPenality;
+                subProblem[i][j].penality = minPenality;
             }
         }
-        return reconstruct(left, right, gapPenality, mismatchPenality, problem);
+        return reconstruct(left, right, gapPenality, mismatchPenality, subProblem);
     }
 
-    private Result reconstruct(final char[] left, final char[] right, final int gapPenality, final int mismatchPenality, final Note[][] problem) {
+    private Result reconstruct(final char[] left, final char[] right, final int gapPenality, final int mismatchPenality, final Note[][] suProblems) {
         //reconstruct sequence alignment
-        char[] leftAligned = new char[left.length + problem[left.length][right.length].leftGapAdded];
-        char[] rightAligned = new char[left.length + problem[left.length][right.length].leftGapAdded];
+        int alignedLength = Math.max(left.length + suProblems[left.length][right.length].leftGapAdded, right.length + suProblems[left.length][right.length].rightGapAdded);
+        char[] leftAligned = new char[alignedLength];
+        char[] rightAligned = new char[alignedLength];
         int i = left.length;
         int j = right.length;
         int curtIndex = leftAligned.length - 1;
         while (i > 0 && j > 0) {
-            int case1Penality =  problem[i - 1][j -1].penality + (left[i - 1] == right[j - 1] ? 0 : mismatchPenality);
-            int case2Penality = problem[i - 1][j].penality + gapPenality;
-            if (case1Penality == problem[i][j].penality) {
+            int case1Penality =  suProblems[i - 1][j -1].penality + (left[i - 1] == right[j - 1] ? 0 : mismatchPenality);
+            int case2Penality = suProblems[i - 1][j].penality + gapPenality;
+            if (case1Penality == suProblems[i][j].penality) {
                 leftAligned[curtIndex] = left[i - 1];
                 rightAligned[curtIndex] = right[j - 1];
                 i -= 1;
                 j -= 1;
             }
-            else if (case2Penality == problem[i][j].penality) {
+            else if (case2Penality == suProblems[i][j].penality) {
                 leftAligned[curtIndex] = left[i - 1];
                 rightAligned[curtIndex] = '-';
                 i -= 1;
@@ -109,8 +112,8 @@ public class SequenceAlignment {
         Result result = new Result();
         result.leftAligned = leftAligned;
         result.rightAligned = rightAligned;
-        result.totalPenality = problem[left.length][right.length].penality;
-        result.subProblems = problem;
+        result.totalPenality = suProblems[left.length][right.length].penality;
+        result.subProblems = suProblems;
         return result;
     }
 }
