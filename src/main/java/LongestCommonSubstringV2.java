@@ -1,12 +1,12 @@
 
 public class LongestCommonSubstringV2 {
     static public class Result {
-        public String commonString;
+        public String commonSubstring;
         public int[][] subProblems;
 
         static public Result create() {
             Result result = new Result();
-            result.commonString = "";
+            result.commonSubstring = "";
             return result;
         }
     }
@@ -70,7 +70,7 @@ public class LongestCommonSubstringV2 {
             leftLen -= 1;
         }
         Result result = Result.create();
-        result.commonString = new String(lcs);
+        result.commonSubstring = new String(lcs);
         result.subProblems = subProblems;
         return result;
     }

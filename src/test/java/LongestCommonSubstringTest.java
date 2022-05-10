@@ -54,9 +54,9 @@ public class LongestCommonSubstringTest {
             LongestCommonSubstringV2.Result result = longestCommonSubstringV2.longestCommonSubstring(entry.str1.toCharArray(), entry.str2.toCharArray());
             System.out.println(entry.str1);
             System.out.println(entry.str2);
-            System.out.println(result.commonString);
+            System.out.println(result.commonSubstring);
             Utility.dump(result.subProblems, fetchValue);
-            Assert.assertTrue(entry.lcs.equals(result.commonString));
+            Assert.assertTrue(entry.lcs.equals(result.commonSubstring));
         }
     }
 }
