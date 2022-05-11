@@ -45,4 +45,8 @@ public class Utility {
         }
     }
 
+    public static boolean isEmpty(final String str) {
+        return null == str || str.length() == 0;
+    }
+
 }
