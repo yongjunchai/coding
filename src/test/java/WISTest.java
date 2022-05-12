@@ -35,6 +35,8 @@ public class WISTest {
 
         Entry entry3 = new Entry();
         entry3.nodes = null;
+        entries.add(entry3);
+
         return entries;
     }
 
