@@ -45,6 +45,25 @@ public class Utility {
         }
     }
 
+    public static void dump(final int[] t) {
+        if (t == null || t.length == 0) {
+            return;
+        }
+        for (int i = 0; i < t.length; ++ i) {
+            System.out.print(String.format("%5s", Integer.toString(t[i])));
+        }
+    }
+
+    public static <T> void dump(final T[] t, FetchValue fetchValue) {
+        if (t == null || t.length == 0) {
+            return;
+        }
+        for (int i = 0; i < t.length; ++ i) {
+            System.out.print(String.format("%12s", fetchValue.getValue(t[i])));
+        }
+        System.out.println();
+    }
+
     public static boolean isEmpty(final String str) {
         return null == str || str.length() == 0;
     }
