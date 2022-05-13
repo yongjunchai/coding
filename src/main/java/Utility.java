@@ -52,6 +52,7 @@ public class Utility {
         for (int i = 0; i < t.length; ++ i) {
             System.out.print(String.format("%5s", Integer.toString(t[i])));
         }
+        System.out.println();
     }
 
     public static <T> void dump(final T[] t, FetchValue fetchValue) {
