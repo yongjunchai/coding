@@ -35,19 +35,19 @@ public class WIS {
         //reconstruct solution
         Deque<Node> deque = new LinkedList<>();
         int i = nodes.length;
-        int values = 0;
+        //go through non-base cases
          while (i > 1){
             int case1 = subProblems[i - 2] + nodes[i - 1].weight;
             int case2 = subProblems[i - 1];
             if(case1 == subProblems[i]) {
                 deque.addFirst(nodes[i - 1]);
-                values += nodes[i - 1].weight;
                 i -= 2;
                 continue;
             }
             i -= 1;
          }
-         if (values < subProblems[nodes.length]) {
+         //base case, if the second last was not selected, add the first one
+         if (! deque.getFirst().name.equals(nodes[1].name)) {
              deque.addFirst(nodes[0]);
          }
          Node[] nodeWIS = new Node[deque.size()];
