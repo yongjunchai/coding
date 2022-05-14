@@ -43,8 +43,22 @@ public class Utility {
             }
             System.out.println();
         }
+        System.out.println();
     }
 
+    public static void dump(final double[] t) {
+        if (null == t) {
+            return;
+        }
+        int m = t.length;
+        if (m == 0) {
+            return;
+        }
+        for (int i = m - 1; i >= 0; -- i) {
+                System.out.print(String.format("%5.2f", t[i]));
+            }
+            System.out.println();
+    }
 
     public static void dump(final int[][] t, FetchValue fetchValue) {
         if (null == t) {

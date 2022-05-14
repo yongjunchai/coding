@@ -37,6 +37,7 @@ public class OptBSTTest {
         OptBST optBST = new OptBST();
         for (Entry entry : entries) {
             OptBST.Result result = optBST.getOptBST(entry.keys, entry.frequencies);
+            Utility.dump(entry.frequencies);
             Utility.dump(result.subProblems);
             Assert.assertTrue(result.weightedSearchTime == entry.minAverageSearchTime);
         }

@@ -14,9 +14,6 @@ public class OptBST {
     }
 
     private double calMinSubProblems(final int start, final int end, double[][] subProblems) {
-        if (start == 1 && end == 3) {
-            System.out.println();
-        }
         double minWeightedSearch = Double.MAX_VALUE;
         for(int root = start; root <= end; ++ root) {
             double subProblemSum = subProblems[start][root - 1];
@@ -29,10 +26,6 @@ public class OptBST {
     }
 
     private double frequencySum(final int start, final int end, final double[] frequencies) {
-        if (start == 1 && end == 3) {
-            System.out.println();
-        }
-
         double frequencySum = 0;
         for(int i = start - 1; i < end; ++ i) {
             frequencySum += frequencies[i];
