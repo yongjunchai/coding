@@ -28,6 +28,8 @@ public class OptBSTTest {
         entries.add(createEntry(new double[] {0.1, 0.8, 0.1}, 1.2));
         entries.add(createEntry(new double[] {0.8, 0.1, 0.1}, 1.3));
         entries.add(createEntry(new double[] {0.1, 0.1, 0.8}, 1.3));
+        entries.add(createEntry(new double[] {}, 0));
+
         return entries;
     }
 
@@ -37,9 +39,57 @@ public class OptBSTTest {
         OptBST optBST = new OptBST();
         for (Entry entry : entries) {
             OptBST.Result result = optBST.getOptBST(entry.keys, entry.frequencies);
+            if (entry.frequencies == null || entry.frequencies.length == 0) {
+                Assert.assertTrue(null == result);
+                continue;
+            }
             Utility.dump(entry.frequencies);
             Utility.dump(result.subProblems);
             Assert.assertTrue(result.weightedSearchTime == entry.minAverageSearchTime);
+            System.out.println();
         }
     }
+
+    @Test
+    public void optBSTTestV2() {
+        List<Entry> entries = getTestData();
+        OptBSTV2 optBST = new OptBSTV2();
+        for (Entry entry : entries) {
+            OptBSTV2.Result result = optBST.getOptBST(entry.keys, entry.frequencies);
+            if (entry.frequencies == null || entry.frequencies.length == 0) {
+                Assert.assertTrue(null == result);
+                continue;
+            }
+            Utility.dump(entry.frequencies);
+            Utility.dump(result.subProblems);
+            Assert.assertTrue(result.minAverageSearchTime == entry.minAverageSearchTime);
+            System.out.println();
+        }
+    }
+
+    @Test
+    public void optBSTTestV3() {
+        List<Entry> entries = getTestData();
+        OptBSTV3 optBST = new OptBSTV3();
+        Utility.FetchValue<OptBSTV3.Note> fetchValue = note -> {
+            if (null == note) {
+                return "";
+            }
+            else {
+                return String.format("%5.2f", note.value);
+            }
+        };
+        for (Entry entry : entries) {
+            OptBSTV3.Result result = optBST.getOptBST(entry.keys, entry.frequencies);
+            if (entry.frequencies == null || entry.frequencies.length == 0) {
+                Assert.assertTrue(null == result);
+                continue;
+            }
+            Utility.dump(entry.frequencies);
+            Utility.dump(result.subProblems, fetchValue);
+            System.out.println();
+            Assert.assertTrue(result.minAverageSearchTime == entry.minAverageSearchTime);
+        }
+    }
+
 }
