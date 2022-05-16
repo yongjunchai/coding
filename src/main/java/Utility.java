@@ -54,7 +54,7 @@ public class Utility {
         if (m == 0) {
             return;
         }
-        for (int i = m - 1; i >= 0; -- i) {
+        for (int i = 0; i < m; ++ i) {
                 System.out.print(String.format("%5.2f", t[i]));
             }
             System.out.println();
