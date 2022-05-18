@@ -22,6 +22,8 @@ public class LongestCommonSubstringV3Test {
     private List<Entry> getTestData() {
         List<Entry> entries = new ArrayList<>();
         entries.add(Entry.create("abc dddddddd", "dddddddd abc", "abc"));
+        entries.add(Entry.create("abc dddddddd", "", ""));
+        entries.add(Entry.create("abc dddddddd", "kkk", ""));
         return entries;
     }
 
