@@ -1,3 +1,8 @@
+
+
+/**
+ * longest common substring without repeating characters
+ * */
 public class LongestCommonSubstringV3 {
     static public class Result {
         public String commonSubstring;
