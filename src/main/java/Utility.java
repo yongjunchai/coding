@@ -1,3 +1,10 @@
+import model.Edge;
+import model.Node;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Utility {
 
@@ -102,6 +109,30 @@ public class Utility {
 
     public static boolean isEmpty(final String str) {
         return null == str || str.length() == 0;
+    }
+
+    public static <T> boolean isEmpty(final Collection<T> collection) {
+        return null == collection || collection.isEmpty();
+    }
+
+    public static Map<String, Node> buildNodeMap(final List<Edge> edges) {
+        Map<String, Node> nodeMap = new HashMap<>();
+        if (isEmpty(edges)) {
+            return nodeMap;
+        }
+        for (Edge edge: edges) {
+            Node srcNode = nodeMap.get(edge.src);
+            Node targetNode = nodeMap.get(edge.target);
+            if (null == srcNode) {
+                srcNode = new Node();
+            }
+            if (null == targetNode) {
+                targetNode = new Node();
+            }
+            srcNode.outgoingEdges.put(edge.target, edge.length);
+            targetNode.incomingEdges.put(edge.src, edge.length);
+        }
+        return nodeMap;
     }
 
 }
