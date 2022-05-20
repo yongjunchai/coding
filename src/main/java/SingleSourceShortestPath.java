@@ -1,6 +1,10 @@
 import model.Edge;
 import model.Node;
+import model.Path;
 
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +13,8 @@ public class SingleSourceShortestPath {
     public static class Result {
         public boolean hasNegativeCycle;
         public int[][] subProblems;
-
+        public Node[] nodes;
+        public Map<String, Path> pathMap;
     }
 
     public Result findSingleSourceShortestPath(final String source, final List<Edge> edges) {
@@ -68,13 +73,63 @@ public class SingleSourceShortestPath {
                     subProblems[step][i] = subProblems[step - 1][i];
                 }
             }
-            if (stable) {
-                break;
-            }
         }
         Result result = new Result();
         result.hasNegativeCycle = ! stable;
         result.subProblems = subProblems;
+        result.nodes = nodes;
+        result.pathMap = reconstructPath(source, nodes, nodeMap, subProblems);
         return result;
     }
+
+    private Map<String, Path> reconstructPath(final String src, final Node[] nodes, final Map<String, Node> nodeMap, final int[][] subProblems)
+    {
+        Map<String, Path> pathMap = new HashMap<>();
+        for (int i = 0; i < nodes.length; ++ i) {
+            if (nodes[i].name.equals(src)) {
+                continue;
+            }
+            Path path = new Path();
+            path.src = src;
+            path.target = nodes[i].name;
+            path.totalLengh = subProblems[nodes.length][i];
+            if (path.totalLengh == Integer.MAX_VALUE) {
+                pathMap.put(path.target, path);
+                continue;
+            }
+            Deque<Edge> edgeDeque = new LinkedList<>();
+            int curNodeIndex = i;
+            for (int step = nodes.length; step > 0; -- step) {
+                if (subProblems[step][curNodeIndex] == subProblems[step - 1][curNodeIndex]) {
+                    continue;
+                }
+                for (Map.Entry<String, Integer> entry : nodes[curNodeIndex].incomingEdges.entrySet()) {
+                    Node incomingNode = nodeMap.get(entry.getKey());
+                    int pathLen = 0;
+                    if (subProblems[step - 1][incomingNode.index] == Integer.MAX_VALUE) {
+                        continue;
+                    }
+                    else {
+                        pathLen = subProblems[step - 1][incomingNode.index] + entry.getValue();
+                    }
+                    if (pathLen == subProblems[step][curNodeIndex]) {
+                        Edge edge = new Edge();
+                        edge.src = incomingNode.name;
+                        edge.target = nodes[curNodeIndex].name;
+                        edge.length = entry.getValue();
+                        edgeDeque.addFirst(edge);
+                        curNodeIndex = incomingNode.index;
+                        break;
+                    }
+                }
+            }
+            while (edgeDeque.size() > 0) {
+                Edge edge = edgeDeque.removeFirst();
+                path.edges.add(edge);
+            }
+            pathMap.put(nodes[i].name, path);
+        }
+        return pathMap;
+    }
+
 }

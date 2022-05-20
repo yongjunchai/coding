@@ -102,7 +102,7 @@ public class Utility {
             return;
         }
         for (int i = 0; i < t.length; ++ i) {
-            System.out.print(String.format("%12s", fetchValue.getValue(t[i])));
+            System.out.print(String.format("%5s", fetchValue.getValue(t[i])));
         }
         System.out.println();
     }
@@ -125,9 +125,13 @@ public class Utility {
             Node targetNode = nodeMap.get(edge.target);
             if (null == srcNode) {
                 srcNode = new Node();
+                srcNode.name = edge.src;
+                nodeMap.put(edge.src, srcNode);
             }
             if (null == targetNode) {
                 targetNode = new Node();
+                targetNode.name = edge.target;
+                nodeMap.put(edge.target, targetNode);
             }
             srcNode.outgoingEdges.put(edge.target, edge.length);
             targetNode.incomingEdges.put(edge.src, edge.length);
