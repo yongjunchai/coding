@@ -107,6 +107,13 @@ public class Utility {
         System.out.println();
     }
 
+    public static <T> boolean isEmpty(T[] t) {
+        return t == null || t.length == 0;
+    }
+    public static  boolean isEmpty(Map t) {
+        return t == null || t.isEmpty();
+    }
+
     public static boolean isEmpty(final String str) {
         return null == str || str.length() == 0;
     }
