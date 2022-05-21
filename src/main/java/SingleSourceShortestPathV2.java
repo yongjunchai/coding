@@ -89,9 +89,6 @@ public class SingleSourceShortestPathV2 {
             return null;
         }
         Node node = nodeMap.get(target);
-        if (null == node) {
-            return null;
-        }
         if (subProblems[nodes.length][node.index].value == Integer.MAX_VALUE) {
             return null;
         }
@@ -102,14 +99,8 @@ public class SingleSourceShortestPathV2 {
                 continue;
             }
             Integer edgeLen = curNode.incomingEdges.get(subProblems[step][curNode.index].previousNodeName);
-            if (edgeLen == null) {
-                return null;
-            }
             edgeDeque.addFirst(Edge.create(subProblems[step][curNode.index].previousNodeName, curNode.name, edgeLen));
             curNode = nodeMap.get(subProblems[step][curNode.index].previousNodeName);
-            if (curNode == null) {
-                return null;
-            }
         }
         Path path = new Path();
         path.src = src;
