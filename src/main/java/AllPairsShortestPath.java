@@ -67,8 +67,8 @@ public class AllPairsShortestPath {
                         }
                     }
                     //case 2, last vertex is not part of the path
-                    int cas2Len = subProblems[nodesLen - 1][i][j];
-                    subProblems[nodesLen][i][j] = Math.min(case1Len, cas2Len);
+                    int case2Len = subProblems[nodesLen - 1][i][j];
+                    subProblems[nodesLen][i][j] = Math.min(case1Len, case2Len);
                 }
             }
         }
@@ -93,7 +93,7 @@ public class AllPairsShortestPath {
         if (Utility.isEmpty(source) || Utility.isEmpty(target)) {
             return null;
         }
-        if (context == null || context.hasNegativeLoop) {
+        if (context == null) {
             return null;
         }
         Node srcNode = context.nodeMap.get(source);

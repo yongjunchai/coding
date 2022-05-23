@@ -1,7 +1,9 @@
 import model.Edge;
+import model.Node;
 import model.Path;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.reporters.jq.INavigatorPanel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -155,6 +157,58 @@ public class AllPairsShortestPathTest {
                 }
                 System.out.println();
             }
+        }
+    }
+
+    @Test
+    public void dumpNegativeCycleGraph() {
+        List<Entry> entries = getTestData();
+        Utility.FetchValue<Integer> fetchValue = a -> {
+            if (a == Integer.MAX_VALUE) {
+                return "-";
+            }
+            else {
+                return Integer.toString(a);
+            }
+        };
+        Utility.FetchValue<Node> nodeFetchValue = node -> node.name;
+        for (Entry entry : entries) {
+            AllPairsShortestPath allPairsShortestPath = new AllPairsShortestPath();
+            AllPairsShortestPath.Result result = allPairsShortestPath.findAllPairsShortestPath(entry.edges);
+            if (Utility.isEmpty(entry.edges)) {
+                Assert.assertTrue(null == result);
+                continue;
+            }
+
+            if (! entry.hasNegativeCycle) {
+                continue;
+            }
+
+            for (int nodePathLen = 0; nodePathLen <= result.nodes.length; ++ nodePathLen) {
+                System.out.printf("node path length = %d\n", nodePathLen);
+                Utility.dump(result.nodes, nodeFetchValue);
+                Utility.dump(result.subProblems[nodePathLen], fetchValue);
+                System.out.println();
+            }
+
+            System.out.println("Dump paths");
+            for (int i = 0; i < result.nodes.length; ++ i) {
+                for (int j = 0; j < result.nodes.length; ++ j) {
+                    if (result.subProblems[result.nodes.length][i][j] == Integer.MAX_VALUE) {
+                        continue;
+                    }
+                    System.out.printf("%s --> %s, %d \n", result.nodes[i].name, result.nodes[j].name, result.subProblems[result.nodes.length][i][j]);
+                    Path path = allPairsShortestPath.findPath(result.nodes[i].name, result.nodes[j].name);
+                    if (null == path) {
+                        continue;
+                    }
+                    for (Edge edge : path.edges) {
+                        System.out.printf("%s -> %s, %d\n", edge.src, edge.target, edge.length);
+                    }
+                    System.out.println("------------------------");
+                }
+            }
+
         }
     }
     
