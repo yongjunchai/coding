@@ -3,7 +3,6 @@ import model.Node;
 import model.Path;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.testng.reporters.jq.INavigatorPanel;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -35,6 +35,7 @@ public class AllPairsShortestPath {
         int[][][] subProblems = new int[maxPathLen + 1][nodes.length][nodes.length];
 
         //base case, there is no internal vertexes, path length is 0
+        //after step 0, the graph has been built up with all input edges.
         for (int i = 0; i < nodes.length; ++ i) {
             for (int j = 0; j < nodes.length; ++ j) {
                 if (i == j) {
@@ -52,19 +53,15 @@ public class AllPairsShortestPath {
             }
         }
         //systemically solve the sub problems
+        //after every new internal node added, we will rebuild all the paths.
+
         for (int nodesLen = 1; nodesLen <= maxPathLen; ++ nodesLen) {
             for (int i = 0; i < nodes.length; ++ i) {
                 for (int j = 0; j < nodes.length; ++ j) {
                     //case 1, last vertex is part of the path
-                    //v-->k->w
                     int case1Len = Integer.MAX_VALUE;
-                    if (subProblems[nodesLen - 1][i][nodesLen - 1] != Integer.MAX_VALUE) {
-                        //length of k->w
-                        Node k = nodes[nodesLen - 1];
-                        Integer kwLen = k.outgoingEdges.get(nodes[j].name);
-                        if (kwLen != null) {
-                            case1Len = subProblems[nodesLen - 1][i][nodesLen - 1] + kwLen;
-                        }
+                    if (subProblems[nodesLen - 1][i][nodesLen - 1] != Integer.MAX_VALUE && subProblems[nodesLen - 1][nodesLen - 1][j] != Integer.MAX_VALUE) {
+                            case1Len = subProblems[nodesLen - 1][i][nodesLen - 1] + subProblems[nodesLen - 1][nodesLen - 1][j];
                     }
                     //case 2, last vertex is not part of the path
                     int case2Len = subProblems[nodesLen - 1][i][j];
