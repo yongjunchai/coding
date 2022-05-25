@@ -58,14 +58,14 @@ public class AllPairsShortestPath {
         for (int nodesLen = 1; nodesLen <= maxPathLen; ++ nodesLen) {
             for (int i = 0; i < nodes.length; ++ i) {
                 for (int j = 0; j < nodes.length; ++ j) {
-                    //case 1, last vertex is part of the path
-                    int case1Len = Integer.MAX_VALUE;
+                    //case 1, last vertex is not part of the path
+                    int case1Len = subProblems[nodesLen - 1][i][j];
+                    //case 2, last vertex is part of the path
+                    int case2Len = Integer.MAX_VALUE;
                     if (subProblems[nodesLen - 1][i][nodesLen - 1] != Integer.MAX_VALUE && subProblems[nodesLen - 1][nodesLen - 1][j] != Integer.MAX_VALUE) {
-                            case1Len = subProblems[nodesLen - 1][i][nodesLen - 1] + subProblems[nodesLen - 1][nodesLen - 1][j];
+                            case2Len = subProblems[nodesLen - 1][i][nodesLen - 1] + subProblems[nodesLen - 1][nodesLen - 1][j];
                     }
-                    //case 2, last vertex is not part of the path
-                    int case2Len = subProblems[nodesLen - 1][i][j];
-                    subProblems[nodesLen][i][j] = Math.min(case1Len, case2Len);
+                    subProblems[nodesLen][i][j] = Math.min(case2Len, case1Len);
                 }
             }
         }
@@ -111,32 +111,24 @@ public class AllPairsShortestPath {
         path.target = target;
         Deque<Edge> edgeDeque = new LinkedList<>();
         Node curNode = targetNode;
-        for (int nodesLen = context.nodes.length; nodesLen > 0; -- nodesLen) {
-            if (curNode.name.equals(srcNode.name)) {
-                break;
-            }
-            if (curNode.name.equals(context.nodes[nodesLen - 1])) {
-                //last node is the same as current target node, skip
-                continue;
-            }
-            //case 1, last vertex is part of the path
-            //v-->k->w
-            int case1Len = Integer.MAX_VALUE;
-            Node k = null;
-            Integer kwLen = 0;
-            if (context.subProblems[nodesLen - 1][srcNode.index][nodesLen - 1] != Integer.MAX_VALUE) {
-                //length of k->w
-                k = context.nodes[nodesLen - 1];
-                kwLen = k.outgoingEdges.get(curNode.name);
-                if (kwLen != null) {
-                    case1Len = context.subProblems[nodesLen -  1][srcNode.index][nodesLen - 1] + kwLen;
+        while (! curNode.name.equals(srcNode.name)) {
+
+            for(int nodeLen = context.nodes.length; nodeLen >= 0; -- nodeLen) {
+                if (nodeLen == 0) {
+                    edgeDeque.addFirst(Edge.create(srcNode.name, curNode.name, context.subProblems[0][srcNode.index][curNode.index]));
+                    curNode = srcNode;
+                    break;
                 }
-            }
-            //case 2, last vertex is not part of the path
-            int case2Len = context.subProblems[nodesLen - 1][srcNode.index][curNode.index];
-            if (case1Len == context.subProblems[nodesLen][srcNode.index][curNode.index]) {
-                edgeDeque.addFirst(Edge.create(k.name, curNode.name, kwLen));
-                curNode = k;
+                if (context.subProblems[nodeLen][srcNode.index][curNode.index] == context.subProblems[nodeLen - 1][srcNode.index][curNode.index]) {
+                    continue;
+                }
+                Integer edgeLen = context.nodes[nodeLen - 1].outgoingEdges.get(curNode.name);
+                if (null == edgeLen) {
+                    return null;
+                }
+                edgeDeque.addFirst(Edge.create(context.nodes[nodeLen - 1].name, curNode.name, edgeLen));
+                curNode = context.nodes[nodeLen - 1];
+                break;
             }
         }
         while (edgeDeque.size() > 0) {

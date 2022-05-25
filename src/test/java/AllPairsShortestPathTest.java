@@ -28,7 +28,6 @@ public class AllPairsShortestPathTest {
         entry.edges.add(Edge.create("x", "t", 4));
         entry.edges.add(Edge.create("v", "y", 4));
         entry.edges.add(Edge.create("t", "y", 2));
-        entry.edges.add(Edge.create("p", "w", 2));
         Path path = new Path();
         path.src = "s";
         path.target = "t";
@@ -127,6 +126,12 @@ public class AllPairsShortestPathTest {
     @Test
     public void findAllPairsShortestPathTest() {
         List<Entry> entries = getTestData();
+        Utility.FetchValue<Integer> fetchValue = a -> {
+            if (a == Integer.MAX_VALUE) {
+                return "-";
+            }
+            return Integer.toString(a);
+        };
         for (Entry entry : entries) {
             AllPairsShortestPath allPairsShortestPath = new AllPairsShortestPath();
             AllPairsShortestPath.Result result = allPairsShortestPath.findAllPairsShortestPath(entry.edges);
@@ -138,6 +143,8 @@ public class AllPairsShortestPathTest {
                 Assert.assertTrue(result.hasNegativeLoop);
                 continue;
             }
+
+            Utility.dump(result.subProblems[result.nodes.length], fetchValue);
             for (Path path : entry.paths) {
                 Path pathFind = allPairsShortestPath.findPath(path.src, path.target);
                 if (Utility.isEmpty(path.src) || Utility.isEmpty(path.target)) {
