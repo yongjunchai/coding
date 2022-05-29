@@ -98,7 +98,7 @@ public class SingleSourceShortestPathV2 {
             if (subProblems[step][curNode.index].value == subProblems[step - 1][curNode.index].value) {
                 continue;
             }
-            Integer edgeLen = curNode.incomingEdges.get(nodes[subProblems[step][curNode.index].previousNodeIndex].name);
+            Integer edgeLen = subProblems[step][curNode.index].value - subProblems[step - 1][subProblems[step][curNode.index].previousNodeIndex].value;
             edgeDeque.addFirst(Edge.create(nodes[subProblems[step][curNode.index].previousNodeIndex].name, curNode.name, edgeLen));
             curNode = nodes[subProblems[step][curNode.index].previousNodeIndex];
         }
