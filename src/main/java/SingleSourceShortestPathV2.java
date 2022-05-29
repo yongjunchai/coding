@@ -17,7 +17,7 @@ public class SingleSourceShortestPathV2 {
 
     public static class Note {
         public int value;
-        public String previousNodeName;
+        public int previousNodeIndex;
     }
 
     public Result findSingleSourceShortestPath(final String source, final List<Edge> edges) {
@@ -62,7 +62,7 @@ public class SingleSourceShortestPathV2 {
                         int pathLen = subProblems[step - 1][incomingNode.index].value + entry.getValue();
                         if (pathLen < minPath.value) {
                             minPath.value = pathLen;
-                            minPath.previousNodeName = incomingNode.name;
+                            minPath.previousNodeIndex = incomingNode.index;
                         }
                     }
                 }
@@ -98,9 +98,9 @@ public class SingleSourceShortestPathV2 {
             if (subProblems[step][curNode.index].value == subProblems[step - 1][curNode.index].value) {
                 continue;
             }
-            Integer edgeLen = curNode.incomingEdges.get(subProblems[step][curNode.index].previousNodeName);
-            edgeDeque.addFirst(Edge.create(subProblems[step][curNode.index].previousNodeName, curNode.name, edgeLen));
-            curNode = nodeMap.get(subProblems[step][curNode.index].previousNodeName);
+            Integer edgeLen = curNode.incomingEdges.get(nodes[subProblems[step][curNode.index].previousNodeIndex].name);
+            edgeDeque.addFirst(Edge.create(nodes[subProblems[step][curNode.index].previousNodeIndex].name, curNode.name, edgeLen));
+            curNode = nodes[subProblems[step][curNode.index].previousNodeIndex];
         }
         Path path = new Path();
         path.src = src;
