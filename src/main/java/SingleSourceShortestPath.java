@@ -92,8 +92,8 @@ public class SingleSourceShortestPath {
             Path path = new Path();
             path.src = src;
             path.target = nodes[i].name;
-            path.totalLengh = subProblems[nodes.length][i];
-            if (path.totalLengh == Integer.MAX_VALUE) {
+            path.totalLength = subProblems[nodes.length][i];
+            if (path.totalLength == Integer.MAX_VALUE) {
                 pathMap.put(path.target, path);
                 continue;
             }

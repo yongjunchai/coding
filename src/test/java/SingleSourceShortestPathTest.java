@@ -31,7 +31,7 @@ public class SingleSourceShortestPathTest {
         Path path = new Path();
         path.src = "s";
         path.target = "t";
-        path.totalLengh = 5;
+        path.totalLength = 5;
         path.edges.add(Edge.create("s", "u", 2));
         path.edges.add(Edge.create("u", "v", -1));
         path.edges.add(Edge.create("v", "t", 4));
@@ -56,7 +56,7 @@ public class SingleSourceShortestPathTest {
         entry.edges.add(Edge.create("p", "w", 2));
         Path path = new Path();
         path.target = "t";
-        path.totalLengh = 5;
+        path.totalLength = 5;
         path.edges.add(Edge.create("s", "u", 2));
         path.edges.add(Edge.create("u", "v", -1));
         path.edges.add(Edge.create("v", "t", 4));
@@ -82,7 +82,7 @@ public class SingleSourceShortestPathTest {
         Path path = new Path();
         path.src = "s";
         path.target = "p";
-        path.totalLengh = Integer.MAX_VALUE;
+        path.totalLength = Integer.MAX_VALUE;
         entry.paths.add(path);
         entry.hasNegativeCycle = false;
         return entry;
@@ -148,7 +148,7 @@ public class SingleSourceShortestPathTest {
                 continue;
             }
             for (Path path : result.pathMap.values()) {
-                System.out.printf("path: %s --> %s, %d\n", path.src, path.target, path.totalLengh);
+                System.out.printf("path: %s --> %s, %d\n", path.src, path.target, path.totalLength);
                 for (int i = 0; i < path.edges.size(); ++ i) {
                     System.out.printf("%s -> %s, %d\n", path.edges.get(i).src, path.edges.get(i).target, path.edges.get(i).length);
                 }
@@ -157,7 +157,7 @@ public class SingleSourceShortestPathTest {
 
             for (Path path : entry.paths) {
                 Path pathFind = result.pathMap.get(path.target);
-                Assert.assertTrue(path.totalLengh == pathFind.totalLengh);
+                Assert.assertTrue(path.totalLength == pathFind.totalLength);
                 Assert.assertTrue(path.edges.size() == pathFind.edges.size());
                 int edges = path.edges.size();
                 for (int i = 0; i < edges; ++ i) {
@@ -196,11 +196,11 @@ public class SingleSourceShortestPathTest {
             }
             for (Path path : entry.paths) {
                 Path pathFind = singleSourceShortestPath.reconstructPath(path.src, path.target, result.nodes, result.nodeMap, result.subProblems);
-                if (Utility.isEmpty(path.src) || path.totalLengh == Integer.MAX_VALUE) {
+                if (Utility.isEmpty(path.src) || path.totalLength == Integer.MAX_VALUE) {
                     Assert.assertTrue(pathFind == null);
                     continue;
                 }
-                Assert.assertTrue(path.totalLengh == pathFind.totalLengh);
+                Assert.assertTrue(path.totalLength == pathFind.totalLength);
                 Assert.assertTrue(path.edges.size() == pathFind.edges.size());
                 int edges = path.edges.size();
                 for (int i = 0; i < edges; ++ i) {
@@ -208,7 +208,7 @@ public class SingleSourceShortestPathTest {
                     Assert.assertTrue(path.edges.get(i).target.equals(pathFind.edges.get(i).target));
                     Assert.assertTrue(path.edges.get(i).length == (pathFind.edges.get(i).length));
                 }
-                System.out.printf("path: %s --> %s, %d\n", path.src, path.target, path.totalLengh);
+                System.out.printf("path: %s --> %s, %d\n", path.src, path.target, path.totalLength);
                 for (int i = 0; i < path.edges.size(); ++ i) {
                     System.out.printf("%s -> %s, %d\n", path.edges.get(i).src, path.edges.get(i).target, path.edges.get(i).length);
                 }

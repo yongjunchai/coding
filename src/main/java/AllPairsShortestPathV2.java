@@ -112,10 +112,10 @@ public class AllPairsShortestPathV2 {
         path.src = src;
         path.target = target;
         if (context.subProblems[context.nodes.length][srcNode.index][targetNode.index].value == Integer.MAX_VALUE) {
-            path.totalLengh = Integer.MAX_VALUE;
+            path.totalLength = Integer.MAX_VALUE;
             return path;
         }
-        path.totalLengh = context.subProblems[context.nodes.length][srcNode.index][targetNode.index].value;
+        path.totalLength = context.subProblems[context.nodes.length][srcNode.index][targetNode.index].value;
         Node curNode = targetNode;
         Deque<Edge> edgeDeque = new LinkedList<>();
         while (curNode.index != srcNode.index) {

@@ -31,7 +31,7 @@ public class AllPairsShortestPathTest {
         Path path = new Path();
         path.src = "s";
         path.target = "t";
-        path.totalLengh = 5;
+        path.totalLength = 5;
         path.edges.add(Edge.create("s", "u", 2));
         path.edges.add(Edge.create("u", "v", -1));
         path.edges.add(Edge.create("v", "t", 4));
@@ -56,7 +56,7 @@ public class AllPairsShortestPathTest {
         entry.edges.add(Edge.create("p", "w", 2));
         Path path = new Path();
         path.target = "t";
-        path.totalLengh = 5;
+        path.totalLength = 5;
         path.edges.add(Edge.create("s", "u", 2));
         path.edges.add(Edge.create("u", "v", -1));
         path.edges.add(Edge.create("v", "t", 4));
@@ -82,7 +82,7 @@ public class AllPairsShortestPathTest {
         Path path = new Path();
         path.src = "s";
         path.target = "p";
-        path.totalLengh = Integer.MAX_VALUE;
+        path.totalLength = Integer.MAX_VALUE;
         entry.paths.add(path);
         entry.hasNegativeCycle = false;
         return entry;
@@ -105,7 +105,7 @@ public class AllPairsShortestPathTest {
         Path path = new Path();
         path.src = "w";
         path.target = "z";
-        path.totalLengh = Integer.MAX_VALUE;
+        path.totalLength = Integer.MAX_VALUE;
         entry.paths.add(path);
         entry.hasNegativeCycle = false;
         return entry;
@@ -176,12 +176,12 @@ public class AllPairsShortestPathTest {
                     continue;
                 }
                 if (pathFind == null) {
-                    Assert.assertTrue(path.totalLengh == Integer.MAX_VALUE);
+                    Assert.assertTrue(path.totalLength == Integer.MAX_VALUE);
                     continue;
                 }
-                Assert.assertTrue(path.totalLengh == pathFind.totalLengh);
+                Assert.assertTrue(path.totalLength == pathFind.totalLength);
                 Assert.assertTrue(path.edges.size() == pathFind.edges.size());
-                System.out.printf("%s -- > %s, %d\n", pathFind.src, pathFind.target, pathFind.totalLengh);
+                System.out.printf("%s -- > %s, %d\n", pathFind.src, pathFind.target, pathFind.totalLength);
                 int edgeLen = path.edges.size();
                 for (int i = 0; i < edgeLen; ++ i) {
                     Assert.assertTrue(path.edges.get(i).src.equals(pathFind.edges.get(i).src));
@@ -276,12 +276,12 @@ public class AllPairsShortestPathTest {
                     continue;
                 }
                 if (pathFind == null) {
-                    Assert.assertTrue(path.totalLengh == Integer.MAX_VALUE);
+                    Assert.assertTrue(path.totalLength == Integer.MAX_VALUE);
                     continue;
                 }
-                Assert.assertTrue(path.totalLengh == pathFind.totalLengh);
+                Assert.assertTrue(path.totalLength == pathFind.totalLength);
                 Assert.assertTrue(path.edges.size() == pathFind.edges.size());
-                System.out.printf("%s -- > %s, %d\n", pathFind.src, pathFind.target, pathFind.totalLengh);
+                System.out.printf("%s -- > %s, %d\n", pathFind.src, pathFind.target, pathFind.totalLength);
                 int edgeLen = path.edges.size();
                 for (int i = 0; i < edgeLen; ++ i) {
                     Assert.assertTrue(path.edges.get(i).src.equals(pathFind.edges.get(i).src));

@@ -105,7 +105,7 @@ public class SingleSourceShortestPathV2 {
         Path path = new Path();
         path.src = src;
         path.target = target;
-        path.totalLengh = subProblems[nodes.length][node.index].value;
+        path.totalLength = subProblems[nodes.length][node.index].value;
         while (edgeDeque.size() > 0) {
             path.edges.add(edgeDeque.removeFirst());
         }
