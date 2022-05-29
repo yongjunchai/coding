@@ -255,6 +255,7 @@ public class AllPairsShortestPathTest {
             }
             return Integer.toString(a.value);
         };
+        Utility.FetchValue<Node> nodeFetchValue = node -> node.name;
         for (Entry entry : entries) {
             AllPairsShortestPathV2 allPairsShortestPath = new AllPairsShortestPathV2();
             AllPairsShortestPathV2.Result result = allPairsShortestPath.findAllPairsShortestPath(entry.edges);
@@ -266,7 +267,7 @@ public class AllPairsShortestPathTest {
                 Assert.assertTrue(result.hasNegativeCycle);
                 continue;
             }
-
+            Utility.dump(result.nodes, nodeFetchValue);
             Utility.dump(result.subProblems[result.nodes.length], fetchValue);
             for (Path path : entry.paths) {
                 Path pathFind = allPairsShortestPath.findPath(path.src, path.target);

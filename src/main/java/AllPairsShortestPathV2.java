@@ -58,6 +58,7 @@ public class AllPairsShortestPathV2 {
         for (int internalNodesLen = 1; internalNodesLen <= nodes.length; ++ internalNodesLen) {
             for (int srcNodeIndex = 0; srcNodeIndex < nodes.length; ++ srcNodeIndex) {
                 for (int targetNodeIndex = 0; targetNodeIndex < nodes.length; ++ targetNodeIndex) {
+                    subProblems[internalNodesLen][srcNodeIndex][targetNodeIndex] = new Note();
                     //case 1, the last internal node is not used;
                     int case1Len = subProblems[internalNodesLen - 1][srcNodeIndex][targetNodeIndex].value;
 
@@ -68,7 +69,6 @@ public class AllPairsShortestPathV2 {
                     ) {
                         case2Len = subProblems[internalNodesLen - 1][srcNodeIndex][nodes[internalNodesLen - 1].index].value + subProblems[internalNodesLen - 1][nodes[internalNodesLen - 1].index][targetNodeIndex].value;
                     }
-                    subProblems[internalNodesLen][srcNodeIndex][targetNodeIndex] = new Note();
                     if (case1Len < case2Len) {
                         subProblems[internalNodesLen][srcNodeIndex][targetNodeIndex].value = case1Len;
                         subProblems[internalNodesLen][srcNodeIndex][targetNodeIndex].incomingNodeIndex = subProblems[internalNodesLen - 1][srcNodeIndex][targetNodeIndex].incomingNodeIndex;
@@ -120,7 +120,15 @@ public class AllPairsShortestPathV2 {
         Deque<Edge> edgeDeque = new LinkedList<>();
         while (curNode.index != srcNode.index) {
             Node incomingNode = context.nodes[context.subProblems[context.nodes.length][srcNode.index][curNode.index].incomingNodeIndex];
-            Integer edgeLen = incomingNode.outgoingEdges.get(curNode.name);
+            Integer edgeLen = Integer.MAX_VALUE;
+            if (srcNode.index == incomingNode.index) {
+                //this is the last edge
+                edgeLen = context.subProblems[context.nodes.length][srcNode.index][curNode.index].value;
+            }
+            else {
+                edgeLen = context.subProblems[context.nodes.length][srcNode.index][curNode.index].value -
+                        context.subProblems[context.nodes.length][srcNode.index][incomingNode.index].value;
+            }
             edgeDeque.addFirst(Edge.create(incomingNode.name, curNode.name, edgeLen));
             curNode = incomingNode;
         }
