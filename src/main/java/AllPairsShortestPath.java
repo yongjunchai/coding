@@ -34,7 +34,7 @@ public class AllPairsShortestPath {
         //subProblem[path length][source node index][target node index]
         int[][][] subProblems = new int[maxPathLen + 1][nodes.length][nodes.length];
 
-        //base case, there is no internal vertexes, path length is 0
+        //base case, there is no internal vertexes.
         //after step 0, the graph has been built up with all input edges.
         for (int i = 0; i < nodes.length; ++ i) {
             for (int j = 0; j < nodes.length; ++ j) {
@@ -54,7 +54,6 @@ public class AllPairsShortestPath {
         }
         //systemically solve the sub problems
         //after every new internal node added, we will rebuild all the paths.
-
         for (int nodesLen = 1; nodesLen <= maxPathLen; ++ nodesLen) {
             for (int i = 0; i < nodes.length; ++ i) {
                 for (int j = 0; j < nodes.length; ++ j) {
@@ -87,10 +86,7 @@ public class AllPairsShortestPath {
     }
 
     public Path findPath(final String source, final String target) {
-        if (Utility.isEmpty(source) || Utility.isEmpty(target)) {
-            return null;
-        }
-        if (context == null) {
+        if (Utility.isEmpty(source) || Utility.isEmpty(target) || context == null) {
             return null;
         }
         Node srcNode = context.nodeMap.get(source);
