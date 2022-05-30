@@ -1,5 +1,6 @@
 package utils;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import utils.Utility;
 
@@ -7,7 +8,7 @@ public class UtilityTest {
 
     @Test
     public void testMatrix() {
-
+        Assert.assertTrue(Utility.isEmpty(Utility.buildNodeMap(null)));
         Utility.FetchValue<Integer> fetchValue = (t) -> Integer.toString(t);
         int rows = 5;
         int columns = 12;
