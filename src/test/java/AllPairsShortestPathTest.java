@@ -9,7 +9,7 @@ import java.util.List;
 
 public class AllPairsShortestPathTest {
 
-    static private class Entry{
+    static public class Entry{
         public List<Edge> edges = new ArrayList<>();
         public List<Path> paths = new ArrayList<>();
         public boolean hasNegativeCycle;
