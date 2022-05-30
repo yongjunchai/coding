@@ -294,5 +294,66 @@ public class AllPairsShortestPathTest {
         }
     }
 
+    @Test
+    public void allPairsLongestPath() {
+        List<Entry> entries = getTestData();
+        Utility.FetchValue<AllPairsShortestPathV2.Note> fetchValue = a -> {
+            if (a.value == Integer.MAX_VALUE) {
+                return "-";
+            }
+            return Integer.toString(a.value);
+        };
+        Utility.FetchValue<Node> nodeFetchValue = node -> node.name;
+        for (Entry entry : entries) {
+            AllPairsLongestPath allPairsLongestPath = new AllPairsLongestPath();
+            for (Edge edge: entry.edges) {
+                edge.length = (-1) * edge.length;
+            }
+            for (Path path : entry.paths) {
+                if (path.totalLength == Integer.MAX_VALUE) {
+                    continue;
+                }
+                path.totalLength = (-1) * path.totalLength;
+                for (Edge edge: path.edges) {
+                    edge.length = (-1) * edge.length;
+                }
+            }
+            AllPairsShortestPathV2.Result result = allPairsLongestPath.findAllPairsLongestPath(entry.edges);
+            if (Utility.isEmpty(entry.edges)) {
+                Assert.assertTrue(null == result);
+                continue;
+            }
+            if (entry.hasNegativeCycle) {
+                Assert.assertTrue(result.hasNegativeCycle);
+                continue;
+            }
+            Utility.dump(result.nodes, nodeFetchValue);
+            Utility.dump(result.subProblems[result.nodes.length], fetchValue);
+            for (Path path : entry.paths) {
+                Path pathFind = allPairsLongestPath.findPath(path.src, path.target);
+                if (Utility.isEmpty(path.src) || Utility.isEmpty(path.target)) {
+                    Assert.assertTrue(null == pathFind);
+                    continue;
+                }
+                if (pathFind == null) {
+                    Assert.assertTrue(path.totalLength == Integer.MAX_VALUE);
+                    continue;
+                }
+                Assert.assertTrue(path.totalLength == pathFind.totalLength);
+                Assert.assertTrue(path.edges.size() == pathFind.edges.size());
+                System.out.printf("%s -- > %s, %d\n", pathFind.src, pathFind.target, pathFind.totalLength);
+                int edgeLen = path.edges.size();
+                for (int i = 0; i < edgeLen; ++ i) {
+                    Assert.assertTrue(path.edges.get(i).src.equals(pathFind.edges.get(i).src));
+                    Assert.assertTrue(path.edges.get(i).target.equals(pathFind.edges.get(i).target));
+                    Assert.assertTrue(path.edges.get(i).length == pathFind.edges.get(i).length);
+                    System.out.printf("%s -> %s, %d \n", pathFind.edges.get(i).src, pathFind.edges.get(i).target, pathFind.edges.get(i).length);
+                }
+                System.out.println();
+            }
+        }
+
+    }
+
     
 }
