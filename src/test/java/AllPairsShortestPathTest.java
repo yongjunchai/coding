@@ -306,6 +306,8 @@ public class AllPairsShortestPathTest {
         Utility.FetchValue<Node> nodeFetchValue = node -> node.name;
         for (Entry entry : entries) {
             AllPairsLongestPath allPairsLongestPath = new AllPairsLongestPath();
+            Path pathTmp = allPairsLongestPath.findPath("a", "b");
+            Assert.assertTrue(pathTmp == null);
             for (Edge edge: entry.edges) {
                 edge.length = (-1) * edge.length;
             }
