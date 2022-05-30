@@ -1,8 +1,5 @@
 package dp;
 
-import dp.OptBST;
-import dp.OptBSTV2;
-import dp.OptBSTV3;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import utils.Utility;

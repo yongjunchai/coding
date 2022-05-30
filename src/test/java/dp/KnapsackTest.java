@@ -1,6 +1,5 @@
 package dp;
 
-import dp.Knapsack;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import utils.Utility;

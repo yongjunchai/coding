@@ -1,7 +1,5 @@
 package dp;
 
-import dp.SequenceAlignment;
-import dp.SequenceAlignmentV2;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import utils.Utility;

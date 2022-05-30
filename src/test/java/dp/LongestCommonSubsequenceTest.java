@@ -1,8 +1,5 @@
 package dp;
 
-import dp.LongestCommonSubsequence;
-import dp.LongestCommonSubsequenceV2;
-import dp.SequenceAlignmentV2;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import utils.Utility;
