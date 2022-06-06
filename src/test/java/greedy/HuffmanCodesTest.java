@@ -44,8 +44,48 @@ public class HuffmanCodesTest {
         return entry;
     }
 
+    private Entry getTestData3() {
+        Entry entry = new Entry();
+        entry.leafNodes.addAll(
+                Arrays.asList(
+                        LeafNode.create('A', 0.01),
+                        LeafNode.create('B', 0.02),
+                        LeafNode.create('C', 0.03),
+                        LeafNode.create('D', 0.04),
+                        LeafNode.create('E', 0.05),
+                        LeafNode.create('F', 0.06),
+                        LeafNode.create('G', 0.07),
+                        LeafNode.create('H', 0.08),
+                        LeafNode.create('I', 0.09),
+                        LeafNode.create('J', 0.8),
+                        LeafNode.create('K', 0.3)
+                )
+        );
+        return entry;
+    }
+
+    private Entry getTestData4() {
+        Entry entry = new Entry();
+        entry.leafNodes.addAll(
+                Arrays.asList(
+                        LeafNode.create('1', 1),
+                        LeafNode.create('2', 2),
+                        LeafNode.create('3', 3),
+                        LeafNode.create('4', 4),
+                        LeafNode.create('5', 5),
+                        LeafNode.create('6', 6),
+                        LeafNode.create('7', 7),
+                        LeafNode.create('8', 8),
+                        LeafNode.create('9', 9),
+                        LeafNode.create('a', 10),
+                        LeafNode.create('b', 11)
+                )
+        );
+        return entry;
+    }
+
     private List<Entry> getTestData() {
-        return Arrays.asList(getTestData1(), getTestData2(), new Entry());
+        return Arrays.asList(getTestData1(), getTestData2(), new Entry(), getTestData3(), getTestData4());
     }
 
     @Test

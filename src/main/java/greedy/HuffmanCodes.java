@@ -130,15 +130,27 @@ public class HuffmanCodes {
         }
         LeafNode[] leafNodes = new LeafNode[letterFrequencies.size()];
         int size = letterFrequencies.size();
-        for(int i = 0; i < size; ++ i) {
-            leafNodes[i] = letterFrequencies.get(i);
+        int index = 0;
+        for(LeafNode leafNode : letterFrequencies) {
+            leafNodes[index] = leafNode;
+            ++ index;
         }
+        //init: sorted queue is sorted in increasing order
+        //forest is empty
+
         Arrays.sort(leafNodes, new NodeComparator());
         Queue<LeafNode> sortedQueue = new LinkedList<>();
         Queue<InternalNode> forest = new LinkedList<>();
         for (int i = 0; i < size; ++ i) {
             sortedQueue.add(leafNodes[i]);
         }
+        //invariant to maintain: items in forest are in increasing order
+        /**
+         assumed the last item at f is the sum of s1 and s2, both s1 and s2 may be the sum of multiple items.
+         since s1 and s2 are the smallest two of the two queues, s1 and s2 will be less than the head item of the f and the sorted queue.
+         the new item picked up is the sum of the s3 and s4.  since s1 < s3,, s1 < s4, s2 < s3, and s2 < s4,
+         (s1 + s2) < (s3 + s4), f is in increasing order still.
+         * */
         while (sortedQueue.size() > 0 || forest.size() > 1) {
             NodeBase firstSmallest = getSmallest(sortedQueue, forest);
             NodeBase sndSmallest = getSmallest(sortedQueue, forest);
