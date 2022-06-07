@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Stack;
 
 public class HuffmanCodes {
 
@@ -84,6 +85,9 @@ public class HuffmanCodes {
         }
     }
 
+    /**
+     * return the root node the huffman tree
+     * */
     public InternalNode encodeUsingHeap(final List<LeafNode> letterFrequencies) {
         if (null == letterFrequencies || letterFrequencies.size() < 2) {
             return null;
@@ -124,6 +128,9 @@ public class HuffmanCodes {
         return leftSmallest;
     }
 
+    /**
+     * return the root node the huffman tree
+     * */
     public InternalNode encodingUsingQueue(final List<LeafNode> letterFrequencies) {
         if (null == letterFrequencies || letterFrequencies.size() < 2) {
             return null;
@@ -174,6 +181,43 @@ public class HuffmanCodes {
         }
         StringBuilder builder = new StringBuilder();
         collectEncodingRecursive(nodeBase,  builder, encodingMap);
+        return encodingMap;
+    }
+
+    private static class StackFrame {
+        public NodeBase node;
+        public String encoding;
+
+        public static StackFrame create(final NodeBase nodeBase, final String encoding) {
+            StackFrame stackFrame = new StackFrame();
+            stackFrame.node = nodeBase;
+            stackFrame.encoding = encoding;
+            return stackFrame;
+        }
+    }
+
+    public Map<Character, String> getEncodingIterative(final NodeBase nodeBase) {
+        Map<Character, String> encodingMap = new HashMap<>();
+        if (null == nodeBase) {
+            return encodingMap;
+        }
+        Stack<StackFrame> stack = new Stack<>();
+        stack.push(StackFrame.create(nodeBase, ""));
+        while (! stack.isEmpty()) {
+            StackFrame stackFrame = stack.pop();
+            if (stackFrame.node instanceof LeafNode) {
+                LeafNode leafNode = (LeafNode) stackFrame.node;
+                encodingMap.put(leafNode.getLetter(), stackFrame.encoding);
+                continue;
+            }
+            InternalNode internalNode = (InternalNode) stackFrame.node;
+            if (internalNode.getLeftChild() != null) {
+                stack.push(StackFrame.create(internalNode.getLeftChild(), stackFrame.encoding + "0"));
+            }
+            if (internalNode.getRightChild() != null) {
+                stack.push(StackFrame.create(internalNode.getRightChild(), stackFrame.encoding + "1"));
+            }
+        }
         return encodingMap;
     }
 

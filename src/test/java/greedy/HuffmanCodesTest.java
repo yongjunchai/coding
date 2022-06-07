@@ -104,13 +104,19 @@ public class HuffmanCodesTest {
             }
             Map<Character, String> heapCharMap = huffmanCodes.getEncoding(internalNodeHeap);
             Map<Character, String> queueCharMap = huffmanCodes.getEncoding(internalNodeQueue);
+            Map<Character, String> stackIterativeCharMap = huffmanCodes.getEncodingIterative(internalNodeHeap);
             Map<Character, String> badCharMap = huffmanCodes.getEncoding(null);
+            Map<Character, String> badStackIterative = huffmanCodes.getEncodingIterative(null);
+            Assert.assertTrue(Utility.isEmpty(badStackIterative));
             Assert.assertTrue(Utility.isEmpty(badCharMap));
             for (LeafNode leafNode : entry.leafNodes) {
                 String heapEncoded = heapCharMap.get(leafNode.getLetter());
                 String queueEncoded = queueCharMap.get(leafNode.getLetter());
+                String stackIterativeEncoded = stackIterativeCharMap.get(leafNode.getLetter());
                 System.out.printf("%s --> %s\n", leafNode.getLetter(), heapEncoded);
                 Assert.assertTrue(heapEncoded.length() == queueEncoded.length());
+                Assert.assertTrue(stackIterativeEncoded.length() == queueEncoded.length());
+                Assert.assertTrue(heapEncoded.equals(stackIterativeEncoded));
             }
         }
     }
