@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import greedy.HuffmanCodes.LeafNode;
 import utils.Utility;
@@ -22,10 +23,10 @@ public class HuffmanCodesTest {
         Entry entry = new Entry();
         entry.leafNodes.addAll(
             Arrays.asList(
-                LeafNode.create('A', 0.6),
-                LeafNode.create('B', 0.25),
-                LeafNode.create('C', 0.1),
-                LeafNode.create('D', 0.05)
+                LeafNode.create('A', 0.99),
+                LeafNode.create('B', 0.004),
+                LeafNode.create('C', 0.004),
+                LeafNode.create('D', 0.002)
             )
         );
         return entry;
@@ -118,6 +119,52 @@ public class HuffmanCodesTest {
                 Assert.assertTrue(stackIterativeEncoded.length() == queueEncoded.length());
                 Assert.assertTrue(heapEncoded.equals(stackIterativeEncoded));
             }
+            //test encoding and decoding
+            testEncodingDecoding(huffmanCodes, heapCharMap, entry);
         }
+    }
+
+    private static class LeafNodeRatio {
+        public char ch;
+        public double ratioStart;
+        public double ratioEnd;
+    }
+    private void testEncodingDecoding(final HuffmanCodes huffmanCodes, final Map<Character, String> charMap, final Entry entry) {
+        LeafNodeRatio [] alphabet = new LeafNodeRatio[entry.leafNodes.size()];
+        double totalFreq = 0;
+        for (LeafNode leafNode : entry.leafNodes) {
+            totalFreq += leafNode.getFrequency();
+        }
+        int index = 0;
+        double curRatio = 0;
+        for (LeafNode leafNode : entry.leafNodes) {
+            alphabet[index] = new LeafNodeRatio();
+            alphabet[index].ratioStart = curRatio;
+            alphabet[index].ratioEnd = curRatio + (leafNode.getFrequency() / totalFreq);
+            alphabet[index].ch = leafNode.getLetter();
+            curRatio = alphabet[index].ratioEnd;
+            ++ index;
+        }
+        int strLen = 100;
+        StringBuilder stringBuilder = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < strLen; ++ i) {
+            double r = random.nextDouble();
+            char ch = 0;
+            for (int j = 0; j < alphabet.length; ++ j) {
+                if (alphabet[j].ratioStart <= r && alphabet[j].ratioEnd >= r) {
+                    ch = alphabet[j].ch;
+                }
+            }
+            if (ch == 0) {
+                ch = alphabet[0].ch;
+            }
+            stringBuilder.append(ch);
+        }
+        String encoded = huffmanCodes.encode(stringBuilder.toString(), charMap);
+        String decoded = huffmanCodes.decode(encoded, charMap);
+        Assert.assertTrue(stringBuilder.toString().equals(decoded));
+        System.out.println("plain string: " + stringBuilder.toString());
+        System.out.println("decoded:      " + encoded);
     }
 }

@@ -1,5 +1,7 @@
 package greedy;
 
+import utils.Utility;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -221,6 +223,100 @@ public class HuffmanCodes {
         return encodingMap;
     }
 
+    public String encode(final String input, Map<Character, String> encodingMap) {
+        if (Utility.isEmpty(input) || Utility.isEmpty(encodingMap)) {
+            return "";
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        int len = input.length();
+        for(int i = 0; i < len; ++ i) {
+            String en = encodingMap.get(input.charAt(i));
+            if (en == null) {
+                throw new IllegalArgumentException("no encoding mapping");
+            }
+            stringBuilder.append(en);
+        }
+        return stringBuilder.toString();
+    }
+
+    private interface DecodeNode {}
+
+    private static class DecodeInternal implements  DecodeNode {
+        public DecodeNode left;
+        public DecodeNode right;
+    }
+
+    private static class DecodeLeaf implements DecodeNode {
+        public char ch;
+    }
+
+    private DecodeInternal buildDecodingTree(final Map<Character, String> encodingMap) {
+        DecodeInternal root = new DecodeInternal();
+        for (Map.Entry<Character, String> entry : encodingMap.entrySet()) {
+            int szLen = entry.getValue().length();
+            DecodeInternal curNode = root;
+            for (int i = 0; i < szLen; ++ i) {
+                if (i == (szLen - 1)) {
+                    if(entry.getValue().charAt(i) == '0') {
+                        curNode.left = new DecodeLeaf();
+                        ((DecodeLeaf)curNode.left).ch = entry.getKey();
+                    }
+                    else {
+                        curNode.right = new DecodeLeaf();
+                        ((DecodeLeaf)curNode.right).ch = entry.getKey();
+                    }
+                    break;
+                }
+                else {
+                    if(entry.getValue().charAt(i) == '0') {
+                        if (curNode.left == null) {
+                            curNode.left = new DecodeInternal();
+                        }
+                        curNode = (DecodeInternal) curNode.left;
+                    }
+                    else {
+                        if (curNode.right == null) {
+                            curNode.right = new DecodeInternal();
+                        }
+                        curNode = (DecodeInternal) curNode.right;
+                    }
+                }
+            }
+        }
+        return root;
+    }
+
+    public String decode(final String input, final Map<Character, String> encodingMap) {
+        if (Utility.isEmpty(input) || Utility.isEmpty(encodingMap)) {
+            return "";
+        }
+        //build huffman decoding tree
+        DecodeInternal root = buildDecodingTree(encodingMap);
+        int inputLen = input.length();
+        StringBuilder stringBuilder = new StringBuilder();
+        DecodeNode curNode = root;
+        for (int i = 0; i < inputLen; ++ i) {
+            if (! (curNode instanceof DecodeInternal)) {
+                throw new IllegalArgumentException("failed to decode");
+            }
+            char ch = input.charAt(i);
+            if (ch == '0') {
+                curNode = ((DecodeInternal)curNode).left;
+            }
+            else {
+                curNode = ((DecodeInternal)curNode).right;
+            }
+            if (curNode instanceof DecodeLeaf) {
+                stringBuilder.append(((DecodeLeaf) curNode).ch);
+                curNode = root;
+            }
+        }
+        if (curNode != root) {
+            throw new IllegalArgumentException("failed to decode");
+        }
+        return stringBuilder.toString();
+    }
+
     private void collectEncodingRecursive(final NodeBase nodeBase, final StringBuilder curEncoding, Map<Character, String> encodingMap)
     {
         if (nodeBase instanceof LeafNode) {
@@ -240,5 +336,4 @@ public class HuffmanCodes {
             curEncoding.delete(curEncoding.length() - 1, curEncoding.length());
         }
     }
-
 }
