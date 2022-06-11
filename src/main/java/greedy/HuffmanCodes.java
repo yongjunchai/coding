@@ -3,6 +3,7 @@ package greedy;
 import utils.Utility;
 
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -237,6 +238,73 @@ public class HuffmanCodes {
             stringBuilder.append(en);
         }
         return stringBuilder.toString();
+    }
+
+    public static class EncodedBits {
+        public int bitLen;
+        public byte[] bytes;
+    }
+
+    public EncodedBits encodeBit(final String input, Map<Character, String> encodingMap) {
+        if (Utility.isEmpty(input) || Utility.isEmpty(encodingMap)) {
+            return null;
+        }
+        BitSet bitSet = new BitSet();
+        int len = input.length();
+        int outputLen = 0;
+        for (int i = 0; i < len; ++i) {
+            String en = encodingMap.get(input.charAt(i));
+            if (en == null) {
+                throw new IllegalArgumentException("no encoding mapping");
+            }
+            int enLen = en.length();
+            for (int j = 0; j < enLen; ++j) {
+                if ('1' == en.charAt(j)) {
+                    bitSet.set(outputLen);
+                }
+                ++outputLen;
+            }
+        }
+        bitSet.set(outputLen + 1);
+        EncodedBits encodedBits = new EncodedBits();
+        encodedBits.bitLen = outputLen;
+        encodedBits.bytes = bitSet.toByteArray();
+        return encodedBits;
+    }
+
+    public boolean isSet(byte[] arr, int bit) {
+        int index = bit / 8;        // Get the index of the array for the byte with this bit
+        int bitPosition = bit % 8;  // Position of this bit in a byte
+
+        return (arr[index] >> bitPosition & 1) == 1;
+    }
+
+    public String decodeBit(final EncodedBits encodedBits, Map<Character, String> encodingMap) {
+       if (null == encodedBits || Utility.isEmpty(encodingMap)) {
+           return "";
+       }
+       StringBuilder stringBuilder = new StringBuilder();
+       DecodeInternal root = buildDecodingTree(encodingMap);
+       DecodeNode curNode = root;
+       for (int i = 0; i < encodedBits.bitLen; ++ i) {
+           if (! (curNode instanceof DecodeInternal)) {
+               throw new IllegalArgumentException("failed to decode");
+           }
+           if (isSet(encodedBits.bytes, i)) {
+               curNode = ((DecodeInternal)curNode).right;
+           }
+           else {
+               curNode = ((DecodeInternal)curNode).left;
+           }
+           if (curNode instanceof DecodeLeaf) {
+               stringBuilder.append(((DecodeLeaf)curNode).ch);
+               curNode = root;
+           }
+       }
+       if (curNode != root) {
+           throw new IllegalArgumentException("failed to decode");
+       }
+       return stringBuilder.toString();
     }
 
     private interface DecodeNode {}

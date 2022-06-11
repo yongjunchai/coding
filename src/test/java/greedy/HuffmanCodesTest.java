@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -166,5 +167,24 @@ public class HuffmanCodesTest {
         Assert.assertTrue(stringBuilder.toString().equals(decoded));
         System.out.println("plain string: " + stringBuilder.toString());
         System.out.println("decoded:      " + encoded);
+        HuffmanCodes.EncodedBits encodedBits = huffmanCodes.encodeBit(stringBuilder.toString(), charMap);
+        String decodedBits = huffmanCodes.decodeBit(encodedBits, charMap);
+        Assert.assertTrue(decodedBits.equals(stringBuilder.toString()));
+        System.out.println(String.format("input string byte length: [%d], encoded string byte length: [%d], encoded bits byte length: [%d]", stringBuilder.length() * 2, encoded.length() * 2, (encodedBits.bitLen) / 8 + ((encodedBits.bitLen) % 8 == 0 ? 0 : 1)));
     }
+
+
+    @Test
+    public void test() {
+        BitSet bitSet = new BitSet();
+//        for (int i = 0; i < 25; ++ i) {
+//            bitSet.set(i);
+//        }
+        //bitSet.set(10000000);
+        bitSet.clear(20000000);
+        System.out.println("bit set length:  " + bitSet.length());
+        System.out.println("bit set size  :  " + bitSet.size());
+        System.out.println("bit set string:  " + bitSet.toString());
+    }
+
 }
