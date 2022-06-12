@@ -287,9 +287,6 @@ public class HuffmanCodes {
        DecodeInternal root = buildDecodingTree(encodingMap);
        DecodeNode curNode = root;
        for (int i = 0; i < encodedBits.bitLen; ++ i) {
-           if (! (curNode instanceof DecodeInternal)) {
-               throw new IllegalArgumentException("failed to decode");
-           }
            if (isSet(encodedBits.bytes, i)) {
                curNode = ((DecodeInternal)curNode).right;
            }
@@ -300,9 +297,6 @@ public class HuffmanCodes {
                stringBuilder.append(((DecodeLeaf)curNode).ch);
                curNode = root;
            }
-       }
-       if (curNode != root) {
-           throw new IllegalArgumentException("failed to decode");
        }
        return stringBuilder.toString();
     }
@@ -364,9 +358,6 @@ public class HuffmanCodes {
         StringBuilder stringBuilder = new StringBuilder();
         DecodeNode curNode = root;
         for (int i = 0; i < inputLen; ++ i) {
-            if (! (curNode instanceof DecodeInternal)) {
-                throw new IllegalArgumentException("failed to decode");
-            }
             char ch = input.charAt(i);
             if (ch == '0') {
                 curNode = ((DecodeInternal)curNode).left;
@@ -378,9 +369,6 @@ public class HuffmanCodes {
                 stringBuilder.append(((DecodeLeaf) curNode).ch);
                 curNode = root;
             }
-        }
-        if (curNode != root) {
-            throw new IllegalArgumentException("failed to decode");
         }
         return stringBuilder.toString();
     }

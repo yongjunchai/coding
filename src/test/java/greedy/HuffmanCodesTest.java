@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -125,6 +125,34 @@ public class HuffmanCodesTest {
         }
     }
 
+    @Test
+    public void encodeDecode() {
+        HuffmanCodes huffmanCodes = new HuffmanCodes();
+        Assert.assertTrue("".equals(huffmanCodes.encode(null, null)));
+        Assert.assertTrue("".equals(huffmanCodes.decode(null, null)));
+        Assert.assertTrue(null == huffmanCodes.encodeBit(null, null));
+        Assert.assertTrue("".equals(huffmanCodes.decodeBit(null, null)));
+        Map<Character, String> encodingMap = new HashMap<>();
+        encodingMap.put('c', "011111");
+        boolean isEx = false;
+        try {
+            huffmanCodes.encode("abc", encodingMap);
+        }
+        catch (IllegalArgumentException ex) {
+            isEx = true;
+        }
+        Assert.assertTrue(isEx);
+        isEx = false;
+        try {
+            huffmanCodes.encodeBit("abc", encodingMap);
+        }
+        catch (IllegalArgumentException ex) {
+            isEx = true;
+        }
+        Assert.assertTrue(isEx);
+
+    }
+
     private static class LeafNodeRatio {
         public char ch;
         public double ratioStart;
@@ -176,15 +204,10 @@ public class HuffmanCodesTest {
 
     @Test
     public void test() {
-        BitSet bitSet = new BitSet();
-//        for (int i = 0; i < 25; ++ i) {
-//            bitSet.set(i);
-//        }
-        //bitSet.set(10000000);
-        bitSet.clear(20000000);
-        System.out.println("bit set length:  " + bitSet.length());
-        System.out.println("bit set size  :  " + bitSet.size());
-        System.out.println("bit set string:  " + bitSet.toString());
+        int i = - 123;
+        int j = i >> 10;
+        int k = i >>> 10;
+        System.out.println();
     }
 
 }
