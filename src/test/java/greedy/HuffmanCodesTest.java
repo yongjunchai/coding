@@ -24,10 +24,10 @@ public class HuffmanCodesTest {
         Entry entry = new Entry();
         entry.leafNodes.addAll(
             Arrays.asList(
-                LeafNode.create('A', 0.99),
+                LeafNode.create('A', 0.69),
                 LeafNode.create('B', 0.004),
                 LeafNode.create('C', 0.004),
-                LeafNode.create('D', 0.002)
+                LeafNode.create('D', 0.302)
             )
         );
         return entry;
