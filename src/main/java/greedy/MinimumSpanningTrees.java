@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class MinimumSpanningTrees {
 
-    private static class EdgeNodeComparator implements Comparator<Edge> {
+    private static class EdgeComparator implements Comparator<Edge> {
 
         @Override
         public int compare(Edge left, Edge right) {
@@ -39,7 +39,7 @@ public class MinimumSpanningTrees {
         }
         Map<String, Node> nodeMap = Utility.buildNodeMap(edgeList);
         Node startNode = nodeMap.values().iterator().next();
-        PriorityQueue<Edge> edgePriorityQueue = new PriorityQueue<>();
+        PriorityQueue<Edge> edgePriorityQueue = new PriorityQueue<>(new EdgeComparator());
         List<Edge> mst = new ArrayList<>();
         Set<String> nodesIncluded = new HashSet<>();
         //init, put the nodes connected to start node to heap
@@ -47,6 +47,7 @@ public class MinimumSpanningTrees {
             edgePriorityQueue.add(Edge.create(startNode.name, entry.getKey(), entry.getValue()));
         }
         nodesIncluded.add(startNode.name);
+        //invariant: edges in mst span nodesIncluded
         int totalLen = 0;
         while (! edgePriorityQueue.isEmpty()) {
             Edge edge = edgePriorityQueue.poll();
@@ -54,6 +55,7 @@ public class MinimumSpanningTrees {
                 continue;
             }
             mst.add(edge);
+            nodesIncluded.add(edge.target);
             totalLen += edge.length;
             Node targetNode = nodeMap.get(edge.target);
             if (null == targetNode) {
@@ -71,4 +73,11 @@ public class MinimumSpanningTrees {
         result.length = totalLen;
         return  result;
     }
+    //TODO: implement PRIM with heap delete log(n)
+    //the heap store the vertexes to be added. each vertx have a field storing the index inside the heap.
+    //in that way, as long as we know the vertex, we know its index inside the heap, and we can delete the vertex from
+    //the heap with log(n).
+//    public Result primHeapWithDelete(final List<Edge> edges) {
+//        return null;
+//    }
 }
