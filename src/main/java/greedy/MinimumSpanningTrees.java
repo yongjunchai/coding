@@ -5,7 +5,9 @@ import model.Node;
 import utils.Utility;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -80,4 +82,147 @@ public class MinimumSpanningTrees {
 //    public Result primHeapWithDelete(final List<Edge> edges) {
 //        return null;
 //    }
+
+    static class UnionFindNode {
+        private int size;
+        private String name;
+        private UnionFindNode parent;
+
+        public int getSize() {
+            return size;
+        }
+
+        public void setSize(int size) {
+            this.size = size;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public UnionFindNode getParent() {
+            return parent;
+        }
+
+        public void setParent(UnionFindNode parent) {
+            this.parent = parent;
+        }
+    }
+
+    static public class UnionFind {
+        private UnionFindNode[] unionFindNodes;
+        private Map<String, UnionFindNode> unionFindNodeMap;
+
+        public UnionFind(Set<String> names) {
+            if (Utility.isEmpty(names)) {
+                throw new IllegalArgumentException("name set can't be empty");
+            }
+            unionFindNodes = new UnionFindNode[names.size()];
+            unionFindNodeMap = new HashMap<>();
+            int i = 0;
+            for (String name : names) {
+                unionFindNodes[i] = new UnionFindNode();
+                unionFindNodes[i].setName(name);
+                unionFindNodes[i].setSize(1);
+                unionFindNodes[i].setParent(unionFindNodes[i]);
+                unionFindNodeMap.put(name, unionFindNodes[i]);
+                ++ i;
+            }
+        }
+
+        public UnionFindNode find(final String name) {
+            UnionFindNode curNode = this.unionFindNodeMap.get(name);
+            if (curNode == null) {
+                return null;
+            }
+            return findNode(curNode);
+        }
+
+        private UnionFindNode findNode(final UnionFindNode unionFindNode) {
+            UnionFindNode curNode = unionFindNode;
+            while (! curNode.getName().equals(curNode.getParent().getName())) {
+                curNode = curNode.getParent();
+            }
+            return curNode;
+        }
+
+        public void union(UnionFindNode v, UnionFindNode w) {
+            if (null == v || null == w) {
+                return;
+            }
+            UnionFindNode vRoot = this.findNode(v);
+            UnionFindNode wRoot = this.findNode(w);
+            if (vRoot.getSize() >=  wRoot.size) {
+                vRoot.setSize(vRoot.getSize() + wRoot.getSize());
+                wRoot.setParent(vRoot);
+            }
+            else {
+                wRoot.setSize(vRoot.getSize() +wRoot.getSize());
+                vRoot.setParent(wRoot);
+            }
+        }
+    }
+
+    public Result kruskal(final Edge[] edges) {
+        if (null == edges || edges.length == 0) {
+            return null;
+        }
+        Result result = new Result();
+        result.edges = new ArrayList<>();
+        Arrays.sort(edges, new EdgeComparator());
+        Set<String> nodeNames = new HashSet<>();
+        for (Edge edge : edges) {
+            nodeNames.add(edge.src);
+            nodeNames.add(edge.target);
+        }
+        UnionFind unionFind = new UnionFind(nodeNames);
+        for (Edge edge : edges) {
+            UnionFindNode v = unionFind.find(edge.src);
+            UnionFindNode w = unionFind.find(edge.target);
+            if (v.name.equals(w.getName())) {
+                continue;
+            }
+            unionFind.union(v, w);
+            result.length += edge.length;
+            result.edges.add(edge);
+        }
+        return result;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

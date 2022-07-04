@@ -38,12 +38,18 @@ public class MinimumSpanningTreesTest {
         MinimumSpanningTrees minimumSpanningTrees = new MinimumSpanningTrees();
         for (Entry entry : entries) {
             MinimumSpanningTrees.Result result = minimumSpanningTrees.prim(entry.edges);
+            Edge[] edges = new Edge[entry.edges.size()];
+            int i = 0;
+            for (Edge edge : entry.edges) {
+                edges[i] = edge;
+                ++ i;
+            }
+            MinimumSpanningTrees.Result kruskal = minimumSpanningTrees.kruskal(edges);
             for (Edge edge : result.edges) {
                 System.out.println(String.format("%3s -> %3s : %3d", edge.src, edge.target, edge.length));
             }
             Assert.assertTrue(entry.mstLen == result.length);
+            Assert.assertTrue(entry.mstLen == kruskal.length);
         }
     }
-
-
 }
