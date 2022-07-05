@@ -35,6 +35,30 @@ public class MinimumSpanningTrees {
         public List<Edge> edges;
     }
 
+    /**
+     * Input: an un-directed connected graph G=(V, E)
+     * Output: edges of a MST
+     *
+     * How it works:
+     *  set up two vertex sets: X, V-X
+     *  vertexes in X are connected by selected edges,
+     *  every iteration select the minimum edges that connect the vertex in X and V-X
+     *
+     * Proof:
+     *  1. edges selected by Prim is a spanning tree
+     *      since the edge selected is crossing X and V-X, it is type-f addition, it reduces the number of connected components by 1.
+     *      after n - 1 edges added, the connected components reduced to 1.
+     *  2. edges selected by Prim satisfy MBP
+     *      to any v-w edge selected in Prim, v belong to X, w belong to V-X. to any path P of v~w, it needs cross the component boundary.
+     *      to any path that crossing X, V-X and connect v~w, it will be longer than v-w. v-w satisfy the MBP.
+     *  3. edges selected by Prim is MST
+     *      Spanning tree with edges satisfy MBP  is MST.
+     *
+     * */
+
+    /**
+     * implement above idea with a heap of edges
+     * */
     public Result prim(final List<Edge> edgeList) {
         if (Utility.isEmpty(edgeList)) {
             return null;
@@ -49,13 +73,16 @@ public class MinimumSpanningTrees {
             edgePriorityQueue.add(Edge.create(startNode.name, entry.getKey(), entry.getValue()));
         }
         nodesIncluded.add(startNode.name);
-        //invariant: edges in mst span nodesIncluded
+        //invariant: edges in mst connect vertexes in nodesIncluded
         int totalLen = 0;
         while (! edgePriorityQueue.isEmpty()) {
             Edge edge = edgePriorityQueue.poll();
+            //to edge addition we only allow TYPE-F
+            //if new vertex already included in the mst connected component, skip it
             if (nodesIncluded.contains(edge.target)) {
                 continue;
             }
+            //TYPE-F, reduce the number of connected component by one
             mst.add(edge);
             nodesIncluded.add(edge.target);
             totalLen += edge.length;
@@ -164,6 +191,24 @@ public class MinimumSpanningTrees {
         }
     }
 
+    /**
+     * Input: an un-directed connected graph G=(V, E)
+     * Output: edges of a MST
+     *
+     * How it works:
+     *  there is no edges added at the beginning. n vertexes are in n connected components.
+     *  processing edges in ascending order: if vertexes of the edge, belonging to same connected component, skip this edge.
+     *  if the vertexes of the edge, belonging to different component, add the edge and fuse the two connected component.
+
+     * Proof:
+     *  1. edges selected by kruskal is spanning tree.
+     *      since every edge addition is a type-fuse, it will reduce the number of connected components by 1. after n-1 edges added, there will be only one connected component.
+     *  since there is no type-C edge, it is a spanning tree.
+     *  2. edges selected by kruskal is MBP
+     *      To any edge v-w selected by kruskal, it will connect the two connected components that v and w belonging to. Since any other edges that may connect the two connected
+     *      component will be longer than v-w, v-w satisfy the MBP.
+     *  3. Spanning tree with all edges satisfy the MBP is MST.
+     * **/
     public Result kruskal(final Edge[] edges) {
         if (null == edges || edges.length == 0) {
             return null;
