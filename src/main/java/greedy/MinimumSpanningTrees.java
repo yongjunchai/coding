@@ -60,9 +60,6 @@ public class MinimumSpanningTrees {
             nodesIncluded.add(edge.target);
             totalLen += edge.length;
             Node targetNode = nodeMap.get(edge.target);
-            if (null == targetNode) {
-                throw new IllegalArgumentException("failed to find target node: " + edge.target);
-            }
             for(Map.Entry<String, Integer> entry : targetNode.outgoingEdges.entrySet()) {
                 if (nodesIncluded.contains(entry.getKey())) {
                     continue;
@@ -161,7 +158,7 @@ public class MinimumSpanningTrees {
                 wRoot.setParent(vRoot);
             }
             else {
-                wRoot.setSize(vRoot.getSize() +wRoot.getSize());
+                wRoot.setSize(vRoot.getSize() + wRoot.getSize());
                 vRoot.setParent(wRoot);
             }
         }
