@@ -30,7 +30,7 @@ public class MinimumSpanningTrees {
         }
     }
 
-    public static  class Result {
+    public static class Result {
         public int length;
         public List<Edge> edges;
     }
